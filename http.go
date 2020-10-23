@@ -44,7 +44,7 @@ func respondWithCSS(w http.ResponseWriter, statusCode int, data string) {
 // registerBaseRoutes to register common routes.
 func registerBaseRoutes(r *chi.Mux) {
 	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
-		respondWithCSS(w, http.StatusOK, "it's working")
+		respondWithCSS(w, http.StatusOK, "it's working\n\nfor more info: https://github.com/rl404/mal-cover")
 	})
 	r.Get("/ping", func(w http.ResponseWriter, r *http.Request) {
 		respondWithCSS(w, http.StatusOK, "pong")
