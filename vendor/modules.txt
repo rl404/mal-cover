@@ -5,11 +5,17 @@ github.com/allegro/bigcache/queue
 # github.com/go-chi/chi v4.1.2+incompatible
 ## explicit
 github.com/go-chi/chi
+github.com/go-chi/chi/middleware
 # github.com/joho/godotenv v1.3.0
 ## explicit
 github.com/joho/godotenv
 # github.com/kelseyhightower/envconfig v1.4.0
 ## explicit
 github.com/kelseyhightower/envconfig
+# github.com/rs/cors v1.7.0
+## explicit
+github.com/rs/cors
 # github.com/stretchr/testify v1.6.1
+## explicit
+# golang.org/x/net v0.0.0-20201022231255-08b38378de70
 ## explicit

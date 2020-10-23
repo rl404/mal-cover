@@ -10,11 +10,19 @@ import (
 	"strings"
 
 	"github.com/go-chi/chi"
+	"github.com/go-chi/chi/middleware"
+	"github.com/rs/cors"
 )
 
 // StartHTTP to start serving HTTP.
 func StartHTTP() error {
 	r := chi.NewRouter()
+
+	// Set default recommended go-chi router middlewares.
+	r.Use(middleware.RequestID)
+	r.Use(middleware.RealIP)
+	r.Use(middleware.Recoverer)
+	r.Use(cors.AllowAll().Handler)
 
 	// Register base routes.
 	registerBaseRoutes(r)
@@ -75,6 +83,8 @@ func getAutoCover(w http.ResponseWriter, r *http.Request) {
 
 	reg := regexp.MustCompile(`\/.+(list)\/`)
 	mainType := reg.FindString(userURL)
+	mainType = strings.Replace(mainType, "/", "", -1)
+	mainType = strings.Replace(mainType, "list", "", -1)
 
 	username := strings.Replace(userURL, "/animelist/", "", -1)
 	username = strings.Replace(username, "/mangalist/", "", -1)
