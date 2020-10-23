@@ -35,19 +35,19 @@ Your list's image cover style is like this.
 Convert it by replacing anime/manga id to `{id}` and image URL to `{url}`.
 
 ```css
-.animetitle[href*={id}]:before{background-image:url({url})}
+.animetitle[href*='/{id}/']:before{background-image:url({url})}
 ```
 
 Encode it using [URL encode](https://www.urlencoder.org/).
 
 ```
-.animetitle%5Bhref%2A%3D%7Bid%7D%5D%3Abefore%7Bbackground-image%3Aurl%28%7Burl%7D%29%7D
+.animetitle%5Bhref%2A%3D%27%2F%7Bid%7D%2F%27%5D%3Abefore%7Bbackground-image%3Aurl%28%7Burl%7D%29%7D
 ```
 
 Then use it in endpoint as `style` param.
 
 ```url
-https://mal-cover.herokuapp.com/rl404/anime?style=.animetitle%5Bhref%2A%3D%7Bid%7D%5D%3Abefore%7Bbackground-image%3Aurl%28%7Burl%7D%29%7D
+https://mal-cover.herokuapp.com/rl404/anime?style=.animetitle%5Bhref%2A%3D%27%2F%7Bid%7D%2F%27%5D%3Abefore%7Bbackground-image%3Aurl%28%7Burl%7D%29%7D
 ```
 
 Good luck.
