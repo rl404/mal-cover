@@ -1,0 +1,15 @@
+# github.com/allegro/bigcache v1.2.1
+## explicit
+github.com/allegro/bigcache
+github.com/allegro/bigcache/queue
+# github.com/go-chi/chi v4.1.2+incompatible
+## explicit
+github.com/go-chi/chi
+# github.com/joho/godotenv v1.3.0
+## explicit
+github.com/joho/godotenv
+# github.com/kelseyhightower/envconfig v1.4.0
+## explicit
+github.com/kelseyhightower/envconfig
+# github.com/stretchr/testify v1.6.1
+## explicit
