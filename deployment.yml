@@ -41,6 +41,8 @@ spec:
         - name: mal-cover-api
           image: rl404/mal-cover:latest
           imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 34001
           envFrom:
             - secretRef:
                 name: mal-cover-secret
