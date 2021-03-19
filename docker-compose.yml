@@ -1,0 +1,11 @@
+version: "2.4"
+
+services:
+  mal_cover:
+    container_name: mal-cover
+    image: mal-cover:latest
+    build: .
+    ports:
+      - 34001:34001
+    tty: true
+    env_file: .env

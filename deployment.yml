@@ -1,0 +1,46 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mal-cover-service
+spec:
+  type: NodePort
+  selector:
+    app: mal-cover
+  ports:
+    - name: mal-cover-port
+      protocol: TCP
+      port: 34001
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mal-cover-secret
+type: Opaque
+stringData:
+  MC_PORT: "34001"
+  MC_CACHE: "86400"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mal-cover-deployment
+  labels:
+    app: mal-cover
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mal-cover
+  template:
+    metadata:
+      generateName: mal-cover-pod-
+      labels:
+        app: mal-cover
+    spec:
+      containers:
+        - name: mal-cover-api
+          image: rl404/mal-cover:latest
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - secretRef:
+                name: mal-cover-secret

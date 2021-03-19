@@ -7,8 +7,7 @@ import (
 	"strings"
 )
 
-// ImageURLCleaner to clean anime/manga image cover URL.
-func ImageURLCleaner(str string) string {
+func imageURLCleaner(str string) string {
 	match, _ := regexp.MatchString("(questionmark)|(qm_50)|(na.gif)", str)
 
 	if match {
@@ -28,24 +27,21 @@ func ImageURLCleaner(str string) string {
 	return str
 }
 
-// GetCacheKey to generate cache key.
-func GetCacheKey(key ...string) string {
+func getCacheKey(key ...string) string {
 	return strings.Join(append([]string{"mc"}, key...), ":")
 }
 
-// SetCache to save data to cache.
-func SetCache(key string, data interface{}) error {
+func setCache(key string, data interface{}) error {
 	log.Println("setting cache", key)
 	dataByte, err := json.Marshal(data)
 	if err != nil {
 		return err
 	}
-	return Cache.Set(key, dataByte)
+	return cache.Set(key, dataByte)
 }
 
-// GetCache to get data from cache.
-func GetCache(key string, data interface{}) error {
-	dataByte, err := Cache.Get(key)
+func getCache(key string, data interface{}) error {
+	dataByte, err := cache.Get(key)
 	if err != nil {
 		return err
 	}

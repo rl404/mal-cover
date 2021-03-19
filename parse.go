@@ -10,8 +10,7 @@ import (
 	"strings"
 )
 
-// MyAnimeListURL is MyAnimeList web base URL.
-const MyAnimeListURL string = "https://myanimelist.net"
+const myAnimeListURL = "https://myanimelist.net"
 const animeType = "anime"
 const mangaType = "manga"
 
@@ -23,17 +22,16 @@ type RawData struct {
 	MangaImage string `json:"manga_image_path"`
 }
 
-// getList to get list of all user's anime/manga.
 func getList(username, mainType string) (list []RawData, err error) {
 	// Search from cache.
-	cacheKey := GetCacheKey(username, mainType)
-	if GetCache(cacheKey, &list) == nil {
+	cacheKey := getCacheKey(username, mainType)
+	if getCache(cacheKey, &list) == nil {
 		log.Println("from cache", cacheKey)
 		return list, nil
 	}
 
 	// User URL.
-	listURL := fmt.Sprintf("%s/%slist/%s/load.json?status=7", MyAnimeListURL, mainType, username)
+	listURL := fmt.Sprintf("%s/%slist/%s/load.json?status=7", myAnimeListURL, mainType, username)
 	offset := 0
 
 	// Loop them all.
@@ -46,14 +44,14 @@ func getList(username, mainType string) (list []RawData, err error) {
 
 		// Clean the image URL.
 		for _, l := range tmp {
-			l.AnimeImage = ImageURLCleaner(l.AnimeImage)
-			l.MangaImage = ImageURLCleaner(l.MangaImage)
+			l.AnimeImage = imageURLCleaner(l.AnimeImage)
+			l.MangaImage = imageURLCleaner(l.MangaImage)
 			list = append(list, l)
 		}
 
 		if len(tmp) < 300 {
 			// Return and save to cache.
-			return list, SetCache(cacheKey, list)
+			return list, setCache(cacheKey, list)
 		}
 
 		// Next batch.
@@ -61,8 +59,7 @@ func getList(username, mainType string) (list []RawData, err error) {
 	}
 }
 
-// GenerateCover to generate CSS for anime/manga cover.
-func GenerateCover(username, mainType, style string) (css string, code int, err error) {
+func generateCover(username, mainType, style string) (css string, code int, err error) {
 	// Empty style.
 	if style == "" {
 		return css, http.StatusBadRequest, errors.New("empty style param\nplease check your list style\n\ntry this example:\n\n.animetitle[href*='/{id}/']:before{background-image:url({url})}")

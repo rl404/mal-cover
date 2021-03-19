@@ -9,65 +9,39 @@ import (
 	"github.com/kelseyhightower/envconfig"
 )
 
-// Cfg is config for the project.
-var Cfg Config
+var cfg config
+var cache *bigcache.BigCache
 
-// Cache is cache instance.
-var Cache *bigcache.BigCache
-
-// Config is configuration model from `.env`.
-type Config struct {
+type config struct {
 	// HTTP port.
-	Port string `envconfig:"PORT"`
+	Port string `envconfig:"PORT" default:"34001"`
 	// Caching time (in seconds).
-	Cache int `envconfig:"CACHE"`
+	Cache int `envconfig:"CACHE" default:"86400"`
 }
 
-const (
-	// envPrefix is env prefix name for this project.
-	envPrefix = "MC"
-	// defaultPort is default HTTP port.
-	defaultPort = "34001"
-	// defaultCache is default caching time (1 day).
-	defaultCache = 86400
-)
+const envPrefix = "MC"
 
-// GetConfig to read and parse config from `.env`.
-func GetConfig() error {
-	// Get default config.
-	Cfg = defaultConfig()
-
+func setConfig() (err error) {
 	// Load .env.
-	godotenv.Load()
+	_ = godotenv.Load()
 
 	// Parse .env.
-	err := envconfig.Process(envPrefix, &Cfg)
-	if err != nil {
+	if err := envconfig.Process(envPrefix, &cfg); err != nil {
 		return err
 	}
 
 	// Override PORT env.
-	port := os.Getenv("PORT")
-	if port != "" {
-		Cfg.Port = port
+	if port := os.Getenv("PORT"); port != "" {
+		cfg.Port = port
 	}
 
 	// Prepare the port.
-	Cfg.Port = ":" + Cfg.Port
+	cfg.Port = ":" + cfg.Port
 
 	// Set cache.
-	Cache, err = bigcache.NewBigCache(bigcache.DefaultConfig(time.Duration(Cfg.Cache) * time.Second))
-	if err != nil {
+	if cache, err = bigcache.NewBigCache(bigcache.DefaultConfig(time.Duration(cfg.Cache) * time.Second)); err != nil {
 		return err
 	}
 
 	return nil
-}
-
-// defaultConfig to  get default config.
-func defaultConfig() (cfg Config) {
-	return Config{
-		Port:  defaultPort,
-		Cache: defaultCache,
-	}
 }

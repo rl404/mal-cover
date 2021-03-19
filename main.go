@@ -4,15 +4,13 @@ import "log"
 
 func main() {
 	// Read and parse config.
-	err := GetConfig()
-	if err != nil {
+	if err := setConfig(); err != nil {
 		log.Fatal("failed reading config", err)
 		return
 	}
 
 	// Start HTTP serve.
-	err = StartHTTP()
-	if err != nil {
+	if err := startHTTP(); err != nil {
 		log.Fatal("failed starting HTTP", err)
 	}
 }

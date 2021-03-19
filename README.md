@@ -1,6 +1,12 @@
 # MAL-Cover
 
-Simple web to generate image cover CSS for MyAnimeList list.
+Simple API to generate image cover CSS for MyAnimeList list.
+
+## Installation
+
+```bash
+docker run -p 34001:34001 rl404/mal-cover
+```
 
 ## Endpoints
 
@@ -20,7 +26,7 @@ Will get username and type by reading URL page that call this endpoint. Just put
 
 ## Styling
 
-**This is the most important part**. Every endpoint needs a `style` param. The `style` value depends on how your list show your anime/manga cover image.
+**This is the most important part**. Both endpoint needs a `style` param. The `style` value depends on how your list show your anime/manga cover image.
 
 For example.
 
@@ -46,7 +52,7 @@ Encode it using [URL encode](https://www.urlencoder.org/).
 
 Then use it in endpoint as `style` param.
 
-```url
+```
 https://mal-cover.herokuapp.com/rl404/anime?style=.animetitle%5Bhref%2A%3D%27%2F%7Bid%7D%2F%27%5D%3Abefore%7Bbackground-image%3Aurl%28%7Burl%7D%29%7D
 ```
 
