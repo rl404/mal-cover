@@ -39,7 +39,9 @@ func setConfig() (err error) {
 	cfg.Port = ":" + cfg.Port
 
 	// Set cache.
-	if cache, err = bigcache.NewBigCache(bigcache.DefaultConfig(time.Duration(cfg.Cache) * time.Second)); err != nil {
+	bc := bigcache.DefaultConfig(time.Duration(cfg.Cache) * time.Second)
+	bc.CleanWindow = time.Duration(cfg.Cache) * time.Second
+	if cache, err = bigcache.NewBigCache(bc); err != nil {
 		return err
 	}
 
