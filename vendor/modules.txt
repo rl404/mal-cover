@@ -11,7 +11,7 @@ github.com/joho/godotenv
 # github.com/kelseyhightower/envconfig v1.4.0
 ## explicit
 github.com/kelseyhightower/envconfig
-# github.com/rs/cors v1.7.0
+# github.com/rs/cors v1.8.0
 ## explicit
 github.com/rs/cors
 # github.com/stretchr/testify v1.6.1
