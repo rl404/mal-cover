@@ -5,13 +5,13 @@ github.com/allegro/bigcache/queue
 # github.com/go-chi/chi v4.1.2+incompatible
 ## explicit
 github.com/go-chi/chi
-# github.com/joho/godotenv v1.3.0
+# github.com/joho/godotenv v1.4.0
 ## explicit
 github.com/joho/godotenv
 # github.com/kelseyhightower/envconfig v1.4.0
 ## explicit
 github.com/kelseyhightower/envconfig
-# github.com/rs/cors v1.7.0
+# github.com/rs/cors v1.8.0
 ## explicit
 github.com/rs/cors
 # github.com/stretchr/testify v1.6.1
