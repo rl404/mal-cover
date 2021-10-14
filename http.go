@@ -46,7 +46,7 @@ func registerBaseRoutes(r *chi.Mux) {
 }
 
 func registerRoutes(r *chi.Mux) {
-	r.Get("/auto", getAutoCover)
+	// r.Get("/auto", getAutoCover)
 	r.Get("/{user}/{type}", getCover)
 }
 
