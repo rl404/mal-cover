@@ -8,7 +8,7 @@ Simple API to generate image cover CSS for MyAnimeList list.
 docker run -p 34001:34001 rl404/mal-cover
 ```
 
-## Endpoints
+## Endpoint
 
 ### `/{user}/{type}`
 
@@ -17,16 +17,9 @@ Will generate CSS according to MyAnimeList username and type. For example:
 - `https://mal-cover.herokuapp.com/rl404/anime?style=...`
 - `https://mal-cover.herokuapp.com/rl404/manga?style=...`
 
-### `/auto`
-
-Will get username and type by reading URL page that call this endpoint. Just put this endpoint in CSS file like a normal import CSS file. For example:
-
-- `@import url(https://mal-cover.herokuapp.com/auto?style=...);`
-- `@\import "https://mal-cover.herokuapp.com/auto?style=...";`
-
 ## Styling
 
-**This is the most important part**. Both endpoint needs a `style` param. The `style` value depends on how your list show your anime/manga cover image.
+**This is the most important part**. The endpoint needs a `style` param. The `style` value depends on how your list show your anime/manga cover image.
 
 For example.
 
