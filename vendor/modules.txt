@@ -51,7 +51,7 @@ github.com/kelseyhightower/envconfig
 # github.com/leodido/go-urn v1.2.1
 ## explicit; go 1.13
 github.com/leodido/go-urn
-# github.com/rl404/fairy v0.6.0
+# github.com/rl404/fairy v0.6.1
 ## explicit; go 1.17
 github.com/rl404/fairy/cache
 github.com/rl404/fairy/cache/bigcache
@@ -68,7 +68,7 @@ github.com/rl404/fairy/log/zap
 github.com/rl404/fairy/log/zerolog
 github.com/rl404/fairy/validation
 github.com/rl404/fairy/validation/playground
-# github.com/rs/zerolog v1.26.0
+# github.com/rs/zerolog v1.26.1
 ## explicit; go 1.15
 github.com/rs/zerolog
 github.com/rs/zerolog/internal/cbor
@@ -102,7 +102,7 @@ go.uber.org/zap/internal/bufferpool
 go.uber.org/zap/internal/color
 go.uber.org/zap/internal/exit
 go.uber.org/zap/zapcore
-# golang.org/x/crypto v0.0.0-20210817164053-32db794688a5
+# golang.org/x/crypto v0.0.0-20211215165025-cf75a172585e
 ## explicit; go 1.17
 golang.org/x/crypto/sha3
 # golang.org/x/sys v0.0.0-20211205182925-97ca703d548d
