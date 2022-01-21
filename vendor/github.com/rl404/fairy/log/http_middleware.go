@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
 	"github.com/rl404/fairy/errors"
 )
@@ -21,8 +22,8 @@ type MiddlewareConfig struct {
 	ResponseHeader bool
 	// Show response body.
 	ResponseBody bool
-	// Include query param in url path.
-	QueryParam bool
+	// Show raw path (includes query params).
+	RawPath bool
 	// Show error stack.
 	Error bool
 }
@@ -83,8 +84,12 @@ func HandlerWithLog(logger Logger, next http.Handler, middlewareConfig ...Middle
 			"ip":       getIP(r),
 		}
 
-		if cfg.QueryParam {
-			m["path"] = r.RequestURI
+		if path, ok := getRoutePattern(r); ok {
+			m["path"] = path
+		}
+
+		if cfg.RawPath {
+			m["raw_path"] = r.RequestURI
 		}
 
 		if cfg.RequestHeader {
@@ -106,15 +111,40 @@ func HandlerWithLog(logger Logger, next http.Handler, middlewareConfig ...Middle
 		// Include the error stack if you use it.
 		errStack := s.Get(ctx).([]string)
 		if cfg.Error && len(errStack) > 0 {
+			// Copy slice to prevent reversed multiple times
+			// if using multiple middleware.
+			errTmp := cpSlice(errStack)
+
 			// Reverse the stack order.
-			for i, j := 0, len(errStack)-1; i < j; i, j = i+1, j-1 {
-				errStack[i], errStack[j] = errStack[j], errStack[i]
+			for i, j := 0, len(errTmp)-1; i < j; i, j = i+1, j-1 {
+				errTmp[i], errTmp[j] = errTmp[j], errTmp[i]
 			}
-			m["error"] = errStack
+			m["error"] = errTmp
 		}
 
 		logger.Log(m)
 	})
+}
+
+func cpSlice(arr []string) []string {
+	a := make([]string, len(arr))
+	copy(a, arr)
+	return a
+}
+
+func getRoutePattern(r *http.Request) (string, bool) {
+	routePath := r.URL.Path
+	if r.URL.RawPath != "" {
+		routePath = r.URL.RawPath
+	}
+
+	rctx := chi.RouteContext(r.Context())
+	tctx := chi.NewRouteContext()
+	if rctx.Routes.Match(tctx, r.Method, routePath) {
+		return tctx.RoutePattern(), true
+	}
+
+	return "", false
 }
 
 func getLevelFromStatus(status int) LogLevel {
