@@ -6,7 +6,12 @@ var l log.Logger
 
 // InitLog to init global logger.
 func InitLog(t log.LogType, lvl log.LogLevel, json, color bool) (err error) {
-	l, err = log.New(t, lvl, json, color)
+	l, err = log.New(log.Config{
+		Type:       t,
+		Level:      lvl,
+		JsonFormat: json,
+		Color:      color,
+	})
 	if err != nil {
 		return err
 	}
@@ -16,7 +21,12 @@ func InitLog(t log.LogType, lvl log.LogLevel, json, color bool) (err error) {
 // GetLogger to get logger.
 func GetLogger() log.Logger {
 	if l == nil {
-		l, _ = log.New(log.Zerolog, log.TraceLevel, false, true)
+		l, _ = log.New(log.Config{
+			Type:       log.Zerolog,
+			Level:      log.TraceLevel,
+			JsonFormat: false,
+			Color:      true,
+		})
 	}
 	return l
 }
