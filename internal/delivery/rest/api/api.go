@@ -25,8 +25,7 @@ func New(service service.Service) *API {
 func (api *API) Register(r chi.Router) {
 	r.Route("/", func(r chi.Router) {
 		r.Use(log.MiddlewareWithLog(utils.GetLogger(), log.MiddlewareConfig{
-			QueryParam: true,
-			Error:      true,
+			Error: true,
 		}))
 
 		r.Get("/{user}/{type}", api.handleGetCover)
