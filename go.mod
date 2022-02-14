@@ -6,7 +6,7 @@ require (
 	github.com/go-chi/chi v4.1.2+incompatible
 	github.com/joho/godotenv v1.4.0
 	github.com/kelseyhightower/envconfig v1.4.0
-	github.com/rl404/fairy v0.11.7
+	github.com/rl404/fairy v0.11.8
 	github.com/spf13/cobra v1.3.0
 )
 
