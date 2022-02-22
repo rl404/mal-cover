@@ -64,7 +64,7 @@ github.com/kelseyhightower/envconfig
 # github.com/leodido/go-urn v1.2.1
 ## explicit; go 1.13
 github.com/leodido/go-urn
-# github.com/rl404/fairy v0.11.8
+# github.com/rl404/fairy v0.11.9
 ## explicit; go 1.17
 github.com/rl404/fairy/cache
 github.com/rl404/fairy/cache/bigcache
