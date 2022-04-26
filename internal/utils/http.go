@@ -1,13 +1,11 @@
 package utils
 
 import (
-	"errors"
 	"fmt"
 	"net/http"
-	"os"
 	"runtime/debug"
 
-	"github.com/go-chi/chi/middleware"
+	"github.com/rl404/mal-cover/internal/errors"
 )
 
 // RespondWithCSS to write response with CSS format.
@@ -24,24 +22,21 @@ func RespondWithCSS(w http.ResponseWriter, statusCode int, data string, err erro
 // Recoverer is custom recoverer middleware.
 // Will return 500.
 func Recoverer(next http.Handler) http.Handler {
-	fn := func(w http.ResponseWriter, r *http.Request) {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		defer func() {
-			if rvr := recover(); rvr != nil && rvr != http.ErrAbortHandler {
-
-				logEntry := middleware.GetLogEntry(r)
-				if logEntry != nil {
-					logEntry.Panic(rvr, debug.Stack())
-				} else {
-					fmt.Fprintf(os.Stderr, "Panic: %+v\n", rvr)
-					debug.PrintStack()
-				}
-
-				RespondWithCSS(w, http.StatusInternalServerError, "", errors.New("panic"))
+			if rvr := recover(); rvr != nil {
+				RespondWithCSS(
+					w,
+					http.StatusInternalServerError,
+					"",
+					errors.Wrap(
+						r.Context(),
+						errors.ErrInternalServer,
+						fmt.Errorf("%v", rvr),
+						fmt.Errorf("%s", debug.Stack())))
 			}
 		}()
 
 		next.ServeHTTP(w, r)
-	}
-
-	return http.HandlerFunc(fn)
+	})
 }

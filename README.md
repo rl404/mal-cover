@@ -13,13 +13,13 @@ docker run -p 34001:34001 rl404/mal-cover
 Name | Default | Description
 --- | :---: | ---
 `MC_APP_PORT` | `34001` | Http server port.
-`MC_APP_READ_TIMEOUT` | `60` | Http server read timeout (in seconds).
-`MC_APP_WRITE_TIMEOUT` | `60` | Http server write timeout (in seconds).
-`MC_APP_GRACEFUL_TIMEOUT` | `10` | Http server shut down timeout (in seconds).
+`MC_APP_READ_TIMEOUT` | `1m` | Http server read timeout.
+`MC_APP_WRITE_TIMEOUT` | `1m` | Http server write timeout.
+`MC_APP_GRACEFUL_TIMEOUT` | `10s` | Http server shut down timeout.
 `MC_CACHE_DIALECT` | `inmemory` | Cache type. `nocache`, `redis`, `inmemory`, `memcache`.
 `MC_CACHE_ADDRESS` |  | Cache address.
 `MC_CACHE_PASSWORD` |  | Cache password.
-`MC_CACHE_TIME` | `86400` | Cache time (in seconds).
+`MC_CACHE_TIME` | `24h` | Cache time.
 
 **all the environment variables are optional*
 

@@ -2,6 +2,7 @@ package main
 
 import (
 	"os"
+	"time"
 
 	"github.com/joho/godotenv"
 	"github.com/kelseyhightower/envconfig"
@@ -17,17 +18,17 @@ type config struct {
 }
 
 type appConfig struct {
-	Port            string `envconfig:"PORT" default:"34001" validate:"required" mod:"no_space"`
-	ReadTimeout     int    `envconfig:"READ_TIMEOUT" default:"60" validate:"required,gt=0"`     // second
-	WriteTimeout    int    `envconfig:"WRITE_TIMEOUT" default:"60" validate:"required,gt=0"`    // second
-	GracefulTimeout int    `envconfig:"GRACEFUL_TIMEOUT" default:"10" validate:"required,gt=0"` // second
+	Port            string        `envconfig:"PORT" default:"34001" validate:"required" mod:"no_space"`
+	ReadTimeout     time.Duration `envconfig:"READ_TIMEOUT" default:"1m" validate:"required,gt=0"`
+	WriteTimeout    time.Duration `envconfig:"WRITE_TIMEOUT" default:"1m" validate:"required,gt=0"`
+	GracefulTimeout time.Duration `envconfig:"GRACEFUL_TIMEOUT" default:"10s" validate:"required,gt=0"`
 }
 
 type cacheConfig struct {
-	Dialect  string `envconfig:"DIALECT" default:"inmemory" validate:"required,oneof=nocache redis inmemory memcache" mod:"no_space,lcase"`
-	Address  string `envconfig:"ADDRESS"`
-	Password string `envconfig:"PASSWORD"`
-	Time     int    `envconfig:"TIME" default:"86400" validate:"required,gt=0"` // minute
+	Dialect  string        `envconfig:"DIALECT" default:"inmemory" validate:"required,oneof=nocache redis inmemory memcache" mod:"no_space,lcase"`
+	Address  string        `envconfig:"ADDRESS"`
+	Password string        `envconfig:"PASSWORD"`
+	Time     time.Duration `envconfig:"TIME" default:"24h" validate:"required,gt=0"`
 }
 
 type logConfig struct {
