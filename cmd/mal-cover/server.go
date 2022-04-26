@@ -28,7 +28,7 @@ func server() error {
 	utils.Info("config initialized")
 
 	// Init cache.
-	c, err := cache.New(cacheType[cfg.Cache.Dialect], cfg.Cache.Address, cfg.Cache.Password, time.Duration(cfg.Cache.Time)*time.Minute)
+	c, err := cache.New(cacheType[cfg.Cache.Dialect], cfg.Cache.Address, cfg.Cache.Password, cfg.Cache.Time)
 	if err != nil {
 		return err
 	}
@@ -36,7 +36,7 @@ func server() error {
 	defer c.Close()
 
 	// Init in-memory.
-	im, err := cache.New(cache.InMemory, "", "", 5*time.Second)
+	im, err := cache.New(cache.InMemory, "", "", time.Minute)
 	if err != nil {
 		return err
 	}
