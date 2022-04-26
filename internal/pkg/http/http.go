@@ -25,9 +25,9 @@ type server struct {
 // Config is basic HTTP server config.
 type Config struct {
 	Port            string
-	ReadTimeout     int
-	WriteTimeout    int
-	GracefulTimeout int
+	ReadTimeout     time.Duration
+	WriteTimeout    time.Duration
+	GracefulTimeout time.Duration
 }
 
 // New to create new web server.
@@ -59,8 +59,8 @@ func (s *server) run(ch chan error) {
 
 	s.server = &http.Server{
 		Handler:      s.router,
-		ReadTimeout:  time.Duration(s.cfg.ReadTimeout) * time.Second,
-		WriteTimeout: time.Duration(s.cfg.WriteTimeout) * time.Second,
+		ReadTimeout:  s.cfg.ReadTimeout,
+		WriteTimeout: s.cfg.WriteTimeout,
 	}
 
 	ch <- s.server.Serve(listener)
@@ -72,7 +72,7 @@ func (s *server) Close() error {
 		return nil
 	}
 
-	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(s.cfg.GracefulTimeout)*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), s.cfg.GracefulTimeout)
 	defer cancel()
 
 	return s.server.Shutdown(ctx)
