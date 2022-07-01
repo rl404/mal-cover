@@ -71,7 +71,7 @@ github.com/mattn/go-colorable
 # github.com/mattn/go-isatty v0.0.14
 ## explicit; go 1.12
 github.com/mattn/go-isatty
-# github.com/rl404/fairy v0.14.6
+# github.com/rl404/fairy v0.14.7
 ## explicit; go 1.17
 github.com/rl404/fairy/cache
 github.com/rl404/fairy/cache/bigcache
