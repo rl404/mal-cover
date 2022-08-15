@@ -71,7 +71,18 @@ github.com/mattn/go-colorable
 # github.com/mattn/go-isatty v0.0.14
 ## explicit; go 1.12
 github.com/mattn/go-isatty
-# github.com/rl404/fairy v0.15.10
+# github.com/newrelic/go-agent/v3 v3.18.0
+## explicit; go 1.7
+github.com/newrelic/go-agent/v3/internal
+github.com/newrelic/go-agent/v3/internal/cat
+github.com/newrelic/go-agent/v3/internal/com_newrelic_trace_v1
+github.com/newrelic/go-agent/v3/internal/jsonx
+github.com/newrelic/go-agent/v3/internal/logcontext
+github.com/newrelic/go-agent/v3/internal/logger
+github.com/newrelic/go-agent/v3/internal/sysinfo
+github.com/newrelic/go-agent/v3/internal/utilization
+github.com/newrelic/go-agent/v3/newrelic
+# github.com/rl404/fairy v0.16.0
 ## explicit; go 1.17
 github.com/rl404/fairy/cache
 github.com/rl404/fairy/cache/bigcache
@@ -84,6 +95,7 @@ github.com/rl404/fairy/log
 github.com/rl404/fairy/log/builtin
 github.com/rl404/fairy/log/elasticsearch
 github.com/rl404/fairy/log/logrus
+github.com/rl404/fairy/log/newrelic
 github.com/rl404/fairy/log/nolog
 github.com/rl404/fairy/log/zap
 github.com/rl404/fairy/log/zerolog
