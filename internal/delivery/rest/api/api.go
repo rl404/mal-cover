@@ -4,7 +4,9 @@ import (
 	"net/http"
 
 	"github.com/go-chi/chi"
+	"github.com/newrelic/go-agent/v3/newrelic"
 	"github.com/rl404/fairy/log"
+	"github.com/rl404/fairy/monitoring/newrelic/middleware"
 	"github.com/rl404/mal-cover/internal/service"
 	"github.com/rl404/mal-cover/internal/utils"
 )
@@ -22,11 +24,10 @@ func New(service service.Service) *API {
 }
 
 // Register to register api routes.
-func (api *API) Register(r chi.Router) {
+func (api *API) Register(r chi.Router, nrApp *newrelic.Application) {
 	r.Route("/", func(r chi.Router) {
-		r.Use(log.MiddlewareWithLog(utils.GetLogger(), log.MiddlewareConfig{
-			Error: true,
-		}))
+		r.Use(middleware.NewHTTP(nrApp))
+		r.Use(log.MiddlewareWithLog(utils.GetLogger(), log.MiddlewareConfig{Error: true}))
 
 		r.Get("/{user}/{type}", api.handleGetCover)
 	})

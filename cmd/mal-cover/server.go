@@ -8,7 +8,9 @@ import (
 	"time"
 
 	"github.com/go-chi/chi/middleware"
+	"github.com/newrelic/go-agent/v3/newrelic"
 	"github.com/rl404/fairy/cache"
+	nrCache "github.com/rl404/fairy/monitoring/newrelic/cache"
 	"github.com/rl404/mal-cover/internal/delivery/rest/api"
 	"github.com/rl404/mal-cover/internal/delivery/rest/ping"
 	malRepository "github.com/rl404/mal-cover/internal/domain/mal/repository"
@@ -27,11 +29,25 @@ func server() error {
 	}
 	utils.Info("config initialized")
 
+	// Init newrelic.
+	nrApp, err := newrelic.NewApplication(
+		newrelic.ConfigAppName(cfg.Newrelic.Name),
+		newrelic.ConfigLicense(cfg.Newrelic.LicenseKey),
+		newrelic.ConfigDistributedTracerEnabled(true),
+	)
+	if err != nil {
+		utils.Error(err.Error())
+	} else {
+		defer nrApp.Shutdown(10 * time.Second)
+		utils.Info("newrelic initialized")
+	}
+
 	// Init cache.
 	c, err := cache.New(cacheType[cfg.Cache.Dialect], cfg.Cache.Address, cfg.Cache.Password, cfg.Cache.Time)
 	if err != nil {
 		return err
 	}
+	c = nrCache.New(cfg.Cache.Dialect, c)
 	utils.Info("cache initialized")
 	defer c.Close()
 
@@ -40,12 +56,16 @@ func server() error {
 	if err != nil {
 		return err
 	}
+	im = nrCache.New("inmemory", im)
 	utils.Info("in-memory initialized")
 	defer im.Close()
 
 	// Init mal.
 	var mal malRepository.Repository
-	mal = malHTTP.New(_http.Client{Timeout: 10 * time.Second})
+	mal = malHTTP.New(_http.Client{
+		Timeout:   10 * time.Second,
+		Transport: newrelic.NewRoundTripper(_http.DefaultTransport),
+	})
 	mal = malCache.New(c, mal)
 
 	// Init service.
@@ -70,7 +90,7 @@ func server() error {
 	utils.Info("route ping initialized")
 
 	// Register api route.
-	api.New(service).Register(r)
+	api.New(service).Register(r, nrApp)
 	utils.Info("route api initialized")
 
 	// Run web server.
