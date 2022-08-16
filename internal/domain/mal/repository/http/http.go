@@ -76,7 +76,12 @@ func (c *Client) getRaw(ctx context.Context, url string) ([]rawList, int, error)
 	now := time.Now()
 	defer func() { c.log(code, url, time.Since(now)) }()
 
-	resp, err := c.client.Get(url)
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
+	if err != nil {
+		return nil, http.StatusInternalServerError, errors.Wrap(ctx, errors.ErrInternalServer, err)
+	}
+
+	resp, err := c.client.Do(req)
 	if err != nil {
 		return nil, http.StatusInternalServerError, errors.Wrap(ctx, errors.ErrInternalServer, err)
 	}

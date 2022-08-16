@@ -12,9 +12,10 @@ import (
 )
 
 type config struct {
-	App   appConfig   `envconfig:"APP"`
-	Cache cacheConfig `envconfig:"CACHE"`
-	Log   logConfig   `envconfig:"LOG"`
+	App      appConfig      `envconfig:"APP"`
+	Cache    cacheConfig    `envconfig:"CACHE"`
+	Log      logConfig      `envconfig:"LOG"`
+	Newrelic newrelicConfig `envconfig:"NEWRELIC"`
 }
 
 type appConfig struct {
@@ -36,6 +37,11 @@ type logConfig struct {
 	Level log.LogLevel `envconfig:"LEVEL" default:"-1"`
 	JSON  bool         `envconfig:"JSON" default:"false"`
 	Color bool         `envconfig:"COLOR" default:"true"`
+}
+
+type newrelicConfig struct {
+	Name       string `envconfig:"NAME" default:"mal-cover"`
+	LicenseKey string `envconfig:"LICENSE_KEY"`
 }
 
 const envPath = "../../.env"
