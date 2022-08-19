@@ -85,7 +85,7 @@ github.com/newrelic/go-agent/v3/newrelic
 # github.com/newrelic/go-agent/v3/integrations/nrgrpc v1.3.1
 ## explicit; go 1.11
 github.com/newrelic/go-agent/v3/integrations/nrgrpc
-# github.com/rl404/fairy v0.18.0
+# github.com/rl404/fairy v0.19.0
 ## explicit; go 1.17
 github.com/rl404/fairy/cache
 github.com/rl404/fairy/cache/bigcache

@@ -337,6 +337,8 @@ github.com/prometheus/procfs v0.7.3/go.mod h1:cz+aTbrPOrUb4q7XlbU9ygM+/jj0fzG6c1
 github.com/prometheus/procfs v0.8.0/go.mod h1:z7EfXMXOkbkqb9IINtpCn86r/to3BnA0uaxHdg830/4=
 github.com/rl404/fairy v0.18.0 h1:dvAXn24ET6UJQv4IYSly+LbIYBpE9nfXq7aL3+rlxaQ=
 github.com/rl404/fairy v0.18.0/go.mod h1:gyD5K8nMrdc3H+1WqQzrP2DLu2+O1ydtaM8jkQDQ3dc=
+github.com/rl404/fairy v0.19.0 h1:qXP67xcggYxDfK1PgVmjrNQS0ljgGNh6QeEr18cr/O8=
+github.com/rl404/fairy v0.19.0/go.mod h1:3He54qz0Z7V+nAaDl9MMozGI8w6nG4U/IIIGqRnSVgw=
 github.com/rogpeppe/fastuuid v1.2.0/go.mod h1:jVj6XXZzXRy/MSR5jhDC/2q6DgLz+nrA6LYCDYWNEvQ=
 github.com/rogpeppe/go-internal v1.3.0/go.mod h1:M8bDsm7K2OlrFYOpmOWEs/qY81heoFRclV5y23lUDJ4=
 github.com/rogpeppe/go-internal v1.6.1/go.mod h1:xXDCJY+GAPziupqXw64V24skbSoqbTEfhy4qGm1nDQc=
