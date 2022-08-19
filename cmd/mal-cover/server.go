@@ -10,6 +10,7 @@ import (
 	"github.com/go-chi/chi/middleware"
 	"github.com/newrelic/go-agent/v3/newrelic"
 	"github.com/rl404/fairy/cache"
+	_nr "github.com/rl404/fairy/log/newrelic"
 	nrCache "github.com/rl404/fairy/monitoring/newrelic/cache"
 	"github.com/rl404/mal-cover/internal/delivery/rest/api"
 	"github.com/rl404/mal-cover/internal/delivery/rest/ping"
@@ -34,11 +35,13 @@ func server() error {
 		newrelic.ConfigAppName(cfg.Newrelic.Name),
 		newrelic.ConfigLicense(cfg.Newrelic.LicenseKey),
 		newrelic.ConfigDistributedTracerEnabled(true),
+		newrelic.ConfigAppLogForwardingEnabled(true),
 	)
 	if err != nil {
 		utils.Error(err.Error())
 	} else {
 		defer nrApp.Shutdown(10 * time.Second)
+		utils.AddLog(_nr.NewFromNewrelicApp(nrApp, _nr.WarnLevel))
 		utils.Info("newrelic initialized")
 	}
 
