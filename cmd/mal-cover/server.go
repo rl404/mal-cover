@@ -50,7 +50,7 @@ func server() error {
 	if err != nil {
 		return err
 	}
-	c = nrCache.New(cfg.Cache.Dialect, c)
+	c = nrCache.New(cfg.Cache.Dialect, cfg.Cache.Address, c)
 	utils.Info("cache initialized")
 	defer c.Close()
 
@@ -59,7 +59,7 @@ func server() error {
 	if err != nil {
 		return err
 	}
-	im = nrCache.New("inmemory", im)
+	im = nrCache.New("inmemory", "inmemory", im)
 	utils.Info("in-memory initialized")
 	defer im.Close()
 
