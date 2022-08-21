@@ -33,11 +33,11 @@ func (p Ping) handlePing(w http.ResponseWriter, _ *http.Request) {
 }
 
 func (p Ping) handleNotFound(w http.ResponseWriter, _ *http.Request) {
-	utils.RespondWithCSS(w, http.StatusOK, "page not found\njust like your future", nil)
+	utils.RespondWithCSS(w, http.StatusNotFound, "page not found\njust like your future", nil)
 }
 
 func (p Ping) handleMethodNotAllowed(w http.ResponseWriter, _ *http.Request) {
-	utils.RespondWithCSS(w, http.StatusOK, "wrong method", nil)
+	utils.RespondWithCSS(w, http.StatusMethodNotAllowed, "wrong method", nil)
 }
 
 func (p Ping) handleFavIcon(w http.ResponseWriter, _ *http.Request) {
