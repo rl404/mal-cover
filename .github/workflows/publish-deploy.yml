@@ -53,6 +53,8 @@ jobs:
     name: Deploy
     needs: publish_image
     runs-on: ubuntu-latest
+    env:
+      gcr_image_name: ${{ secrets.GCR_HOSTNAME }}/${{ secrets.GCP_PROJECT_ID }}/mal-cover/mal-cover:${{ needs.publish_image.outputs.img_tag }}
     steps:
       - uses: actions/checkout@v3
       - name: Auth gcloud
@@ -61,6 +63,14 @@ jobs:
           credentials_json: ${{ secrets.GCP_CREDENTIALS }}
       - name: Setup gcloud
         uses: google-github-actions/setup-gcloud@v0
+      - name: Setup docker
+        run: |
+          gcloud --quiet auth configure-docker
+      - name: Copy image to registry
+        run: |
+          docker pull rl404/mal-cover:${{ needs.publish_image.outputs.img_tag }}
+          docker tag rl404/mal-cover:${{ needs.publish_image.outputs.img_tag }} ${{ gcr_image_name }}
+          docker push ${{ gcr_image_name }}
       - name: Deploy
         run: |
-          gcloud run services update ${{ secrets.RUN_SERVICE_NAME }} --platform=managed --region=${{ secrets.RUN_REGION }} --quiet --image=rl404/mal-cover:${{ needs.publish_image.outputs.img_tag }}
+          gcloud run services update ${{ secrets.RUN_SERVICE_NAME }} --platform=managed --region=${{ secrets.RUN_REGION }} --quiet --image=${{ gcr_image_name }}
