@@ -69,8 +69,8 @@ jobs:
       - name: Copy image to registry
         run: |
           docker pull rl404/mal-cover:${{ needs.publish_image.outputs.img_tag }}
-          docker tag rl404/mal-cover:${{ needs.publish_image.outputs.img_tag }} ${{ gcr_image_name }}
-          docker push ${{ gcr_image_name }}
+          docker tag rl404/mal-cover:${{ needs.publish_image.outputs.img_tag }} $gcr_image_name
+          docker push $gcr_image_name
       - name: Deploy
         run: |
-          gcloud run services update ${{ secrets.RUN_SERVICE_NAME }} --platform=managed --region=${{ secrets.RUN_REGION }} --quiet --image=${{ gcr_image_name }}
+          gcloud run services update ${{ secrets.RUN_SERVICE_NAME }} --platform=managed --region=${{ secrets.RUN_REGION }} --quiet --image=$gcr_image_name
