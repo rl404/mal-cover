@@ -6,7 +6,7 @@ require (
 	github.com/go-chi/chi v4.1.2+incompatible
 	github.com/joho/godotenv v1.4.0
 	github.com/kelseyhightower/envconfig v1.4.0
-	github.com/newrelic/go-agent/v3 v3.19.1
+	github.com/newrelic/go-agent/v3 v3.19.2
 	github.com/rl404/fairy v0.20.0
 	github.com/spf13/cobra v1.5.0
 )
@@ -41,6 +41,6 @@ require (
 	golang.org/x/sys v0.0.0-20220811171246-fbc7d0a398ab // indirect
 	golang.org/x/text v0.3.7 // indirect
 	google.golang.org/genproto v0.0.0-20220815135757-37a418bb8959 // indirect
-	google.golang.org/grpc v1.48.0 // indirect
+	google.golang.org/grpc v1.49.0 // indirect
 	google.golang.org/protobuf v1.28.1 // indirect
 )
