@@ -6,7 +6,7 @@ require (
 	github.com/go-chi/chi v4.1.2+incompatible
 	github.com/joho/godotenv v1.5.1
 	github.com/kelseyhightower/envconfig v1.4.0
-	github.com/newrelic/go-agent/v3 v3.23.0
+	github.com/newrelic/go-agent/v3 v3.23.1
 	github.com/rl404/fairy v0.22.1
 	github.com/spf13/cobra v1.7.0
 )
