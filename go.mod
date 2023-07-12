@@ -1,6 +1,6 @@
 module github.com/rl404/mal-cover
 
-go 1.17
+go 1.20
 
 require (
 	github.com/go-chi/chi/v5 v5.0.8
