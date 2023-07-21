@@ -4,8 +4,7 @@ GO_FMT     := $(GO_CMD) fmt
 GO_GET     := $(GO_CMD) get
 GO_MOD     := $(GO_CMD) mod
 GO_CLEAN   := $(GO_CMD) clean
-GO_BUILD   := $(GO_CMD) build -mod vendor
-GO_RUN     := $(GO_CMD) run -mod vendor
+GO_BUILD   := $(GO_CMD) build
 
 # Project executable file, and its binary.
 CMD_PATH    := ./cmd/mal-cover
