@@ -27,11 +27,11 @@ func Validate(data interface{}) error {
 	return val.Validate(data)
 }
 
-func modNoSpace(in string) string {
+func modNoSpace(in string, _ ...string) string {
 	return strings.ReplaceAll(in, " ", "")
 }
 
-func modUnescape(in string) string {
+func modUnescape(in string, _ ...string) string {
 	in, _ = url.QueryUnescape(in)
 	return in
 }
