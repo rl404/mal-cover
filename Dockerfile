@@ -1,5 +1,5 @@
 # Golang base image
-FROM golang:1.20 as go_builder
+FROM golang:1.21 as go_builder
 LABEL stage="mal_cover_builder"
 WORKDIR /mal-cover
 COPY . .
