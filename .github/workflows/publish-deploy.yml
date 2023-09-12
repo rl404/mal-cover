@@ -79,7 +79,7 @@ jobs:
           cat > pipeline.auto.tfvars <<EOF
           gcp_project_id     = "${{ secrets.GCP_PROJECT_ID }}"
           gcp_region         = "${{ secrets.GCP_REGION }}"
-          gcr_image_name     = "${{ secrets.GCR_HOSTNAME }}/${{ secrets.GCP_PROJECT_ID }}/mal-cover:${{ needs.publish.outputs.img_tag }}"
+          gcr_image_name     = "${{ secrets.GCR_HOSTNAME }}/${{ secrets.GCP_PROJECT_ID }}/mal-cover:${{ needs.publish_image.outputs.img_tag }}"
           cloud_run_name     = "${{ secrets.CLOUD_RUN_NAME }}"
           cloud_run_location = "${{ secrets.CLOUD_RUN_LOCATION }}"
           EOF
