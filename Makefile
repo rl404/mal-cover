@@ -10,6 +10,10 @@ GO_BUILD   := $(GO_CMD) build
 CMD_PATH    := ./cmd/mal-cover
 BINARY_NAME := mal-cover
 
+# Base golangci-lint commands.
+GCL_CMD := golangci-lint
+GCL_RUN := $(GCL_CMD) run
+
 # Default makefile target.
 .DEFAULT_GOAL := run
 
@@ -21,12 +25,18 @@ fmt:
 # Lint go source code.
 .PHONY: lint
 lint: fmt
-	@golint `go list ./... | grep -v /vendor/`
+	@$(GCL_RUN) -D errcheck --timeout 5m
 
 # Clean project binary, test, and coverage file.
 .PHONY: clean
 clean:
 	@$(GO_CLEAN) ./...
+
+# Install library.
+.PHONY: install
+install:
+	@curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $$(go env GOPATH)/bin v1.46.2
+	@$(GCL_CMD) version
 
 # Build the project executable binary.
 .PHONY: build
@@ -45,18 +55,18 @@ DOCKER_CMD   := docker
 DOCKER_IMAGE := $(DOCKER_CMD) image
 
 # Docker-compose base command and docker-compose.yml path.
-COMPOSE_CMD  := docker-compose
-COMPOSE_FILE := docker-compose.yml
+COMPOSE_CMD   := docker-compose
+COMPOSE_BUILD := deployment/build.yml
+COMPOSE_API   := deployment/api.yml
 
 # Build docker images and container for the project
 # then delete builder image.
 .PHONY: docker-build
 docker-build:
-	@$(COMPOSE_CMD) -f $(COMPOSE_FILE) build
+	@$(COMPOSE_CMD) -f $(COMPOSE_BUILD) build
 	@$(DOCKER_IMAGE) prune -f --filter label=stage=mal_cover_builder
 
-# Start built docker containers for api.
-.PHONY: docker-api
-docker-api:
-	@$(COMPOSE_CMD) -f $(COMPOSE_FILE) -p mal_cover-api up -d
-	@$(COMPOSE_CMD) -f $(COMPOSE_FILE) -p mal_cover-api logs --follow --tail 20
+# Start docker container.
+.PHONY: docker
+docker:
+	@$(COMPOSE_CMD) -f $(COMPOSE_API) up

@@ -1,0 +1,8 @@
+version: "2.4"
+
+services:
+  mal-cover-build:
+    image: rl404/mal-cover:latest
+    build:
+      context: ./..
+      dockerfile: ./build/package/Dockerfile
