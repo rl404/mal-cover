@@ -13,8 +13,6 @@ resource "google_cloud_run_v2_service" "server" {
     containers {
       name    = var.cloud_run_name
       image   = var.gcr_image_name
-      command = ["./mal-cover"]
-      args    = ["server"]
       env {
         name  = "MC_CACHE_DIALECT"
         value = var.mc_cache_dialect
