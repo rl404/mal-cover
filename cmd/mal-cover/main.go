@@ -7,8 +7,8 @@ import (
 
 func main() {
 	cmd := cobra.Command{
-		Use:   "payment",
-		Short: "Payment API",
+		Use:   "mal-cover",
+		Short: "MAL Cover API",
 	}
 
 	cmd.AddCommand(&cobra.Command{
