@@ -11,8 +11,8 @@ resource "google_cloud_run_v2_service" "server" {
       min_instance_count = 0
     }
     containers {
-      name    = var.cloud_run_name
-      image   = var.gcr_image_name
+      name  = var.cloud_run_name
+      image = var.gcr_image_name
       env {
         name  = "MC_CACHE_DIALECT"
         value = var.mc_cache_dialect
