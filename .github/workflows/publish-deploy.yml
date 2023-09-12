@@ -38,6 +38,15 @@ jobs:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.CR_PAT }}
+      - name: Auth gcloud
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: ${{ secrets.GCP_CREDENTIALS }}
+      - name: Setup gcloud
+        uses: google-github-actions/setup-gcloud@v1
+      - name: Setup docker
+        run: |
+          gcloud --quiet auth configure-docker
       - name: Build and push image
         uses: docker/build-push-action@v4
         with:
@@ -49,28 +58,42 @@ jobs:
             rl404/mal-cover:${{ env.IMG_TAG }}
             ghcr.io/rl404/mal-cover:latest
             ghcr.io/rl404/mal-cover:${{ env.IMG_TAG }}
+            ${{ secrets.GCR_HOSTNAME }}/${{ secrets.GCP_PROJECT_ID }}/mal-cover:${{ env.IMG_TAG }}
   deploy:
     name: Deploy
     needs: publish_image
     runs-on: ubuntu-latest
-    env:
-      gcr_image_name: ${{ secrets.GCR_HOSTNAME }}/${{ secrets.GCP_PROJECT_ID }}/mal-cover/mal-cover:${{ needs.publish_image.outputs.img_tag }}
+    defaults:
+      run:
+        working-directory: ./deployment/terraform
     steps:
-      - uses: actions/checkout@3df4ab11eba7bda6032a0b82a6bb43b11571feac # v4
+      - uses: actions/checkout@v4
       - name: Auth gcloud
         uses: google-github-actions/auth@v1
         with:
           credentials_json: ${{ secrets.GCP_CREDENTIALS }}
-      - name: Setup gcloud
-        uses: google-github-actions/setup-gcloud@v1
-      - name: Setup docker
-        run: |
-          gcloud --quiet auth configure-docker
-      - name: Copy image to registry
-        run: |
-          docker pull rl404/mal-cover:${{ needs.publish_image.outputs.img_tag }}
-          docker tag rl404/mal-cover:${{ needs.publish_image.outputs.img_tag }} $gcr_image_name
-          docker push $gcr_image_name
-      - name: Deploy
-        run: |
-          gcloud run services update ${{ secrets.RUN_SERVICE_NAME }} --platform=managed --region=${{ secrets.RUN_REGION }} --quiet --image=$gcr_image_name
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+      - name: Setup Terraform Variables
+        run: |-
+          cat > pipeline.auto.tfvars <<EOF
+          gcp_project_id     = "${{ secrets.GCP_PROJECT_ID }}"
+          gcp_region         = "${{ secrets.GCP_REGION }}"
+          gcr_image_name     = "${{ secrets.GCR_HOSTNAME }}/${{ secrets.GCP_PROJECT_ID }}/mal-cover:${{ needs.publish.outputs.img_tag }}"
+          cloud_run_name     = "${{ secrets.CLOUD_RUN_NAME }}"
+          cloud_run_location = "${{ secrets.CLOUD_RUN_LOCATION }}"
+          EOF
+      - name: Init Terraform
+        run: terraform init -backend-config "bucket=${{ secrets.GCS_BUCKET }}"
+        env:
+          GOOGLE_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
+      - name: Format Terraform
+        run: terraform fmt -check
+      - name: Plan Terraform
+        run: terraform plan -input=false
+        env:
+          GOOGLE_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
+      - name: Apply Terraform
+        run: terraform apply -auto-approve -input=false
+        env:
+          GOOGLE_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
