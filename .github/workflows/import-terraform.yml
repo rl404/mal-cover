@@ -1,0 +1,45 @@
+name: import terraform
+
+on: workflow_dispatch
+
+jobs:
+  import_terraform:
+    name: Import Terraform
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./deployment/terraform
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+      - name: Auth gcloud
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: ${{ secrets.GCP_CREDENTIALS }}
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+      - name: Setup Terraform Variables
+        run: |-
+          cat > pipeline.auto.tfvars <<EOF
+          gcp_project_id          = "${{ secrets.GCP_PROJECT_ID }}"
+          gcp_region              = "${{ secrets.GCP_REGION }}"
+          gcr_image_name          = "${{ secrets.GCR_HOSTNAME }}/${{ secrets.GCP_PROJECT_ID }}/mal-cover:${{ needs.publish_image.outputs.img_tag }}"
+          cloud_run_name          = "${{ secrets.CLOUD_RUN_NAME }}"
+          cloud_run_location      = "${{ secrets.CLOUD_RUN_LOCATION }}"
+          mc_cache_dialect        = "${{ secrets.MC_CACHE_DIALECT }}"
+          mc_cache_address        = "${{ secrets.MC_CACHE_ADDRESS }}"
+          mc_cache_password       = "${{ secrets.MC_CACHE_PASSWORD }}"
+          mc_cache_time           = "${{ secrets.MC_CACHE_TIME }}"
+          mc_log_level            = "${{ secrets.MC_LOG_LEVEL }}"
+          mc_log_json             = "${{ secrets.MC_LOG_JSON }}"
+          mc_newrelic_license_key = "${{ secrets.MC_NEWRELIC_LICENSE_KEY }}"
+          EOF
+      - name: Init Terraform
+        run: terraform init -backend-config "bucket=${{ secrets.GCS_BUCKET }}"
+        env:
+          GOOGLE_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
+      - name: Import Terraform
+        run: |
+          terraform import -input=false google_cloud_run_v2_service.server ${{ secrets.GCP_PROJECT_ID }}/${{ secrets.CLOUD_RUN_LOCATION }}/${{ secrets.CLOUD_RUN_NAME }}
+        env:
+          GOOGLE_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
