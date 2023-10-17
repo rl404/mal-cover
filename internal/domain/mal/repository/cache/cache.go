@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/rl404/fairy/cache"
+	"github.com/rl404/fairy/errors/stack"
 	"github.com/rl404/mal-cover/internal/domain/mal/entity"
 	"github.com/rl404/mal-cover/internal/domain/mal/repository"
 	"github.com/rl404/mal-cover/internal/errors"
@@ -34,11 +35,11 @@ func (c *Cache) GetList(ctx context.Context, username, mainType string) (data []
 
 	data, code, err = c.repo.GetList(ctx, username, mainType)
 	if err != nil {
-		return nil, code, errors.Wrap(ctx, err)
+		return nil, code, stack.Wrap(ctx, err)
 	}
 
 	if err := c.cacher.Set(ctx, key, data); err != nil {
-		return nil, http.StatusInternalServerError, errors.Wrap(ctx, errors.ErrInternalCache, err)
+		return nil, http.StatusInternalServerError, stack.Wrap(ctx, err, errors.ErrInternalCache)
 	}
 
 	return data, code, nil

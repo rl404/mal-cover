@@ -5,14 +5,15 @@ import (
 	"encoding/json"
 	_errors "errors"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"time"
 
-	"github.com/rl404/fairy/log"
+	"github.com/rl404/fairy/errors/stack"
 	"github.com/rl404/mal-cover/internal/domain/mal/entity"
 	"github.com/rl404/mal-cover/internal/errors"
 	"github.com/rl404/mal-cover/internal/utils"
+	"github.com/rl404/mal-cover/pkg/log"
 )
 
 // Client contains functions for mal http client.
@@ -31,7 +32,6 @@ func New(client http.Client) *Client {
 
 // GetList to get anime/manga list.
 func (c *Client) GetList(ctx context.Context, username, mainType string) ([]entity.Entry, int, error) {
-
 	// User's url.
 	url := fmt.Sprintf("%s/%slist/%s/load.json?status=7", c.malURL, mainType, username)
 	offset := 0
@@ -42,7 +42,7 @@ func (c *Client) GetList(ctx context.Context, username, mainType string) ([]enti
 		// Get raw list.
 		tmp, code, err := c.getRaw(ctx, fmt.Sprintf("%s&offset=%d", url, offset))
 		if err != nil {
-			return nil, code, errors.Wrap(ctx, err)
+			return nil, code, stack.Wrap(ctx, err)
 		}
 
 		// Clean image url.
@@ -78,29 +78,29 @@ func (c *Client) getRaw(ctx context.Context, url string) ([]rawList, int, error)
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
 	if err != nil {
-		return nil, http.StatusInternalServerError, errors.Wrap(ctx, errors.ErrInternalServer, err)
+		return nil, http.StatusInternalServerError, stack.Wrap(ctx, err, errors.ErrInternalServer)
 	}
 
 	resp, err := c.client.Do(req)
 	if err != nil {
-		return nil, http.StatusInternalServerError, errors.Wrap(ctx, errors.ErrInternalServer, err)
+		return nil, http.StatusInternalServerError, stack.Wrap(ctx, err, errors.ErrInternalServer)
 	}
 	defer resp.Body.Close()
 
 	code = resp.StatusCode
 
 	if resp.StatusCode != http.StatusOK {
-		return nil, resp.StatusCode, errors.Wrap(ctx, _errors.New(http.StatusText(resp.StatusCode)))
+		return nil, resp.StatusCode, stack.Wrap(ctx, _errors.New(http.StatusText(resp.StatusCode)))
 	}
 
-	body, err := ioutil.ReadAll(resp.Body)
+	body, err := io.ReadAll(resp.Body)
 	if err != nil {
-		return nil, http.StatusInternalServerError, errors.Wrap(ctx, errors.ErrInternalServer, err)
+		return nil, http.StatusInternalServerError, stack.Wrap(ctx, err, errors.ErrInternalServer)
 	}
 
 	var list []rawList
 	if err := json.Unmarshal(body, &list); err != nil {
-		return nil, http.StatusInternalServerError, errors.Wrap(ctx, errors.ErrInternalServer, err)
+		return nil, http.StatusInternalServerError, stack.Wrap(ctx, err, errors.ErrInternalServer)
 	}
 
 	return list, http.StatusOK, nil

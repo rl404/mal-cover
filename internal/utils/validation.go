@@ -5,13 +5,14 @@ import (
 	"strings"
 
 	"github.com/rl404/fairy/validation"
+	"github.com/rl404/fairy/validation/playground"
 	"github.com/rl404/mal-cover/internal/errors"
 )
 
 var val validation.Validator
 
 func init() {
-	val = validation.New(true)
+	val = playground.New(true)
 	val.RegisterModifier("no_space", modNoSpace)
 	val.RegisterModifier("unescape", modUnescape)
 	val.RegisterValidator("style", valStyle)

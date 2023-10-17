@@ -9,7 +9,6 @@ import (
 
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/newrelic/go-agent/v3/newrelic"
-	"github.com/rl404/fairy/cache"
 	_nr "github.com/rl404/fairy/log/newrelic"
 	nrCache "github.com/rl404/fairy/monitoring/newrelic/cache"
 	"github.com/rl404/mal-cover/internal/delivery/rest/api"
@@ -17,9 +16,10 @@ import (
 	malRepository "github.com/rl404/mal-cover/internal/domain/mal/repository"
 	malCache "github.com/rl404/mal-cover/internal/domain/mal/repository/cache"
 	malHTTP "github.com/rl404/mal-cover/internal/domain/mal/repository/http"
-	"github.com/rl404/mal-cover/internal/pkg/http"
 	"github.com/rl404/mal-cover/internal/service"
 	"github.com/rl404/mal-cover/internal/utils"
+	"github.com/rl404/mal-cover/pkg/cache"
+	"github.com/rl404/mal-cover/pkg/http"
 )
 
 func server() error {
