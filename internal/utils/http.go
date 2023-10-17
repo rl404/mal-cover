@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"runtime/debug"
 
+	"github.com/rl404/fairy/errors/stack"
 	"github.com/rl404/mal-cover/internal/errors"
 )
 
@@ -29,11 +30,10 @@ func Recoverer(next http.Handler) http.Handler {
 					w,
 					http.StatusInternalServerError,
 					"",
-					errors.Wrap(
-						r.Context(),
-						errors.ErrInternalServer,
+					stack.Wrap(r.Context(),
+						fmt.Errorf("%s", debug.Stack()),
 						fmt.Errorf("%v", rvr),
-						fmt.Errorf("%s", debug.Stack())))
+						errors.ErrInternalServer))
 			}
 		}()
 

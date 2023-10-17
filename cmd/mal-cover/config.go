@@ -6,9 +6,9 @@ import (
 
 	"github.com/joho/godotenv"
 	"github.com/kelseyhightower/envconfig"
-	"github.com/rl404/fairy/cache"
-	"github.com/rl404/fairy/log"
 	"github.com/rl404/mal-cover/internal/utils"
+	"github.com/rl404/mal-cover/pkg/cache"
+	"github.com/rl404/mal-cover/pkg/log"
 )
 
 type config struct {
@@ -33,7 +33,6 @@ type cacheConfig struct {
 }
 
 type logConfig struct {
-	Type  log.LogType  `envconfig:"TYPE" default:"2"`
 	Level log.LogLevel `envconfig:"LEVEL" default:"-1"`
 	JSON  bool         `envconfig:"JSON" default:"false"`
 	Color bool         `envconfig:"COLOR" default:"true"`
@@ -48,10 +47,9 @@ const envPath = "../../.env"
 const envPrefix = "MC"
 
 var cacheType = map[string]cache.CacheType{
-	"nocache":  cache.NoCache,
+	"nocache":  cache.NOP,
 	"redis":    cache.Redis,
 	"inmemory": cache.InMemory,
-	"memcache": cache.Memcache,
 }
 
 func getConfig() (*config, error) {
@@ -76,7 +74,7 @@ func getConfig() (*config, error) {
 	}
 
 	// Init global log.
-	if err := utils.InitLog(cfg.Log.Type, cfg.Log.Level, cfg.Log.JSON, cfg.Log.Color); err != nil {
+	if err := utils.InitLog(cfg.Log.Level, cfg.Log.JSON, cfg.Log.Color); err != nil {
 		return nil, err
 	}
 
