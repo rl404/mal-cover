@@ -13,7 +13,6 @@ import (
 	"github.com/rl404/mal-cover/internal/domain/mal/entity"
 	"github.com/rl404/mal-cover/internal/errors"
 	"github.com/rl404/mal-cover/internal/utils"
-	"github.com/rl404/mal-cover/pkg/log"
 )
 
 // Client contains functions for mal http client.
@@ -108,7 +107,7 @@ func (c *Client) getRaw(ctx context.Context, url string) ([]rawList, int, error)
 
 func (c *Client) log(code int, url string, t time.Duration) {
 	utils.Log(map[string]interface{}{
-		"level":    log.DebugLevel,
+		"level":    utils.DebugLevel,
 		"code":     code,
 		"url":      url,
 		"duration": t.String(),
