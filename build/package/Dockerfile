@@ -7,7 +7,7 @@ WORKDIR /mal-cover/cmd/mal-cover
 RUN CGO_ENABLED=0 go build -a -installsuffix cgo -o mal-cover
 
 # New stage from scratch
-FROM alpine:3.21
+FROM alpine:3.22
 LABEL stage="mal_cover_binary"
 RUN apk add --no-cache ca-certificates
 COPY --from=go_builder /mal-cover/cmd/mal-cover/mal-cover /cmd/mal-cover/mal-cover
