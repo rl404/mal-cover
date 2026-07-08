@@ -3,7 +3,7 @@ module github.com/rl404/mal-cover
 go 1.25.0
 
 require (
-	github.com/go-chi/chi/v5 v5.3.0
+	github.com/go-chi/chi/v5 v5.3.1
 	github.com/joho/godotenv v1.5.1
 	github.com/kelseyhightower/envconfig v1.4.0
 	github.com/newrelic/go-agent/v3 v3.44.1
