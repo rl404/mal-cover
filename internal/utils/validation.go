@@ -7,6 +7,8 @@ import (
 	"github.com/rl404/fairy/validation"
 	"github.com/rl404/fairy/validation/playground"
 	"github.com/rl404/mal-cover/internal/errors"
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
 )
 
 var val validation.Validator
@@ -70,7 +72,7 @@ func camelToSnake(name string) string {
 
 	commonInitialismsForReplacer := make([]string, 0, len(commonInitialisms))
 	for _, initialism := range commonInitialisms {
-		commonInitialismsForReplacer = append(commonInitialismsForReplacer, initialism, strings.Title(strings.ToLower(initialism)))
+		commonInitialismsForReplacer = append(commonInitialismsForReplacer, initialism, cases.Title(language.English).String(strings.ToLower(initialism)))
 	}
 	commonInitialismsReplacer = strings.NewReplacer(commonInitialismsForReplacer...)
 
