@@ -13,10 +13,10 @@ func ImageURLCleaner(str string) string {
 		return ""
 	}
 
-	str = strings.Replace(str, "v.jpg", ".jpg", -1)
-	str = strings.Replace(str, "t.jpg", ".jpg", -1)
-	str = strings.Replace(str, "_thumb.jpg", ".jpg", -1)
-	str = strings.Replace(str, "userimages/thumbs", "userimages", -1)
+	str = strings.ReplaceAll(str, "v.jpg", ".jpg")
+	str = strings.ReplaceAll(str, "t.jpg", ".jpg")
+	str = strings.ReplaceAll(str, "_thumb.jpg", ".jpg")
+	str = strings.ReplaceAll(str, "userimages/thumbs", "userimages")
 
 	r := regexp.MustCompile(`r\/\d{1,3}x\d{1,3}\/`)
 	str = r.ReplaceAllString(str, "")

@@ -3,6 +3,7 @@ package utils
 import (
 	"net/url"
 	"strings"
+	"unicode"
 
 	"github.com/rl404/fairy/validation"
 	"github.com/rl404/fairy/validation/playground"
@@ -62,54 +63,30 @@ func camelToSnake(name string) string {
 		return ""
 	}
 
-	var (
-		// https://github.com/golang/lint/blob/master/lint.go#L770
-		commonInitialisms         = []string{"API", "ASCII", "CPU", "CSS", "DNS", "EOF", "GUID", "HTML", "HTTP", "HTTPS", "ID", "IP", "JSON", "LHS", "QPS", "RAM", "RHS", "RPC", "SLA", "SMTP", "SSH", "TLS", "TTL", "UID", "UI", "UUID", "URI", "URL", "UTF8", "VM", "XML", "XSRF", "XSS"}
-		commonInitialismsReplacer *strings.Replacer
-	)
+	runes := []rune(name)
+	var out strings.Builder
 
-	commonInitialismsForReplacer := make([]string, 0, len(commonInitialisms))
-	for _, initialism := range commonInitialisms {
-		commonInitialismsForReplacer = append(commonInitialismsForReplacer, initialism, strings.Title(strings.ToLower(initialism)))
-	}
-	commonInitialismsReplacer = strings.NewReplacer(commonInitialismsForReplacer...)
-
-	var (
-		value                          = commonInitialismsReplacer.Replace(name)
-		buf                            strings.Builder
-		lastCase, nextCase, nextNumber bool // upper case == true
-		curCase                        = value[0] <= 'Z' && value[0] >= 'A'
-	)
-
-	for i, v := range value[:len(value)-1] {
-		nextCase = value[i+1] <= 'Z' && value[i+1] >= 'A'
-		nextNumber = value[i+1] >= '0' && value[i+1] <= '9'
-
-		if curCase {
-			if lastCase && (nextCase || nextNumber) {
-				buf.WriteRune(v + 32)
-			} else {
-				if i > 0 && value[i-1] != '_' && value[i+1] != '_' {
-					buf.WriteByte('_')
+	for i, r := range runes {
+		if unicode.IsUpper(r) {
+			if i > 0 {
+				prev := runes[i-1]
+				next := rune(0)
+				if i+1 < len(runes) {
+					next = runes[i+1]
 				}
-				buf.WriteRune(v + 32)
+
+				if unicode.IsLower(prev) ||
+					(unicode.IsUpper(prev) && unicode.IsLower(next)) {
+					out.WriteByte('_')
+				}
 			}
-		} else {
-			buf.WriteRune(v)
+
+			out.WriteRune(unicode.ToLower(r))
+			continue
 		}
 
-		lastCase = curCase
-		curCase = nextCase
+		out.WriteRune(r)
 	}
 
-	if curCase {
-		if !lastCase && len(value) > 1 {
-			buf.WriteByte('_')
-		}
-		buf.WriteByte(value[len(value)-1] + 32)
-	} else {
-		buf.WriteByte(value[len(value)-1])
-	}
-
-	return buf.String()
+	return out.String()
 }
