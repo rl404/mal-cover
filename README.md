@@ -1,5 +1,10 @@
 # MAL-Cover
 
+![License: MIT](https://img.shields.io/github/license/rl404/mal-cover)
+![GitHub tag (latest SemVer)](https://img.shields.io/github/v/tag/rl404/mal-cover)
+[![Docker Image Size (latest semver)](https://img.shields.io/docker/image-size/rl404/mal-cover)](https://hub.docker.com/r/rl404/mal-cover)
+[![CI](https://github.com/rl404/mal-cover/actions/workflows/ci.yml/badge.svg?event=push)](https://github.com/rl404/mal-cover/actions/workflows/ci.yml)
+
 Simple API to generate image cover CSS for MyAnimeList list.
 
 ## Quick Installation
@@ -20,6 +25,9 @@ docker run -p 34001:34001 rl404/mal-cover
 | `MC_CACHE_ADDRESS`        |            | Cache address.                              |
 | `MC_CACHE_PASSWORD`       |            | Cache password.                             |
 | `MC_CACHE_TIME`           |   `24h`    | Cache time.                                 |
+| `MC_LOG_LEVEL`            |    `-1`    | Log level                                   |
+| `MC_LOG_JSON`             |  `false`   | Log json format                             |
+| `MC_LOG_COLOR`            |   `true`   | Log color                                   |
 
 \*_all the environment variables are optional_
 
@@ -62,7 +70,7 @@ Encode it using [URL encode](https://www.urlencoder.org/).
 
 Then use it in endpoint as `style` param.
 
-```
+```sh
 https://cover.mal.rl404.com/rl404/anime?style=.animetitle%5Bhref%2A%3D%27%2F%7Bid%7D%2F%27%5D%3Abefore%7Bbackground-image%3Aurl%28%7Burl%7D%29%7D
 ```
 
