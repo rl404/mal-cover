@@ -4,7 +4,7 @@ LABEL stage="mal_cover_builder"
 WORKDIR /mal-cover
 COPY . .
 WORKDIR /mal-cover/cmd/mal-cover
-RUN CGO_ENABLED=0 go build -a -installsuffix cgo -o mal-cover
+RUN CGO_ENABLED=0 go build -mod=vendor -ldflags="-s -w" -o mal-cover
 
 # New stage from scratch
 FROM alpine:3.24.3
